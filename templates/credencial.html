@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Credencial de Empleado</title>
+</head>
+<body>
+    <h2>Credencial de Empleado</h2>
+    <p><strong>ID:</strong> {{ empleado_id }}</p>
+    <p><strong>Nombre:</strong> {{ nombre }}</p>
+    <p><strong>Puesto:</strong> {{ puesto }}</p>
+    <img src="{{ url_for('static', filename='barcodes/empleado_' ~ empleado_id ~ '.png') }}" alt="Código de barras">
+    <br>
+    <a href="{{ url_for('registro') }}">Registrar otro empleado</a>
+</body>
+</html>
