@@ -121,6 +121,19 @@ a:hover {
     outline: none;
 }
 
+
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:focus,
+.input-field:-webkit-autofill:hover,
+.input-field:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--primary-color) transparent inset !important;
+    /* Cambia #fff por el color de fondo que usas */
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-text-fill-color: var(--second-color) !important;
+    /* Cambia #333 por el color de texto que usas */
+    transition: background-color 5000s ease-in-out 0s;
+}
+
 #user {
     margin-bottom: 10px;
 }

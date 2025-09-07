@@ -1,13 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from datetime import timedelta
 import mysql.connector
 import barcode
 from barcode.writer import ImageWriter
 import os
 from werkzeug.security import check_password_hash
 
+
 app = Flask(__name__)
 # Cambia esto por una clave segura en producción
 app.secret_key = 'tu_clave_secreta'
+# Duración de la sesión si "recordarme" está activo
+app.permanent_session_lifetime = timedelta(days=7)
 
 # Configuración de la conexión a la base de datos (adapta estos valores cuando tengas la base creada)
 db_config = {
@@ -46,6 +50,8 @@ def login():
     if request.method == 'POST':
         usuario = request.form.get('usuario')
         password = request.form.get('password')
+        # Checkbox: 'on' si está marcado
+        recordarme = request.form.get('recordarme')
         conn = mysql.connector.connect(**db_config)
         cur = conn.cursor(dictionary=True)
         cur.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario,))
@@ -54,7 +60,11 @@ def login():
         conn.close()
         if user and check_password_hash(user['password'], password):
             if user['permiso_validar']:
-                # Aquí puedes guardar el usuario en sesión si quieres
+                session['usuario'] = usuario
+                if recordarme:
+                    session.permanent = True
+                else:
+                    session.permanent = False
                 return redirect(url_for('validar_form'))
             else:
                 flash('No tienes permiso para validar empleados.', 'error')
@@ -67,6 +77,9 @@ def login():
 
 @app.route('/validar_form', methods=['GET'])
 def validar_form():
+    if 'usuario' not in session:
+        flash('Debes iniciar sesión para acceder a esta página.', 'error')
+        return redirect(url_for('login'))
     return render_template('validar_form.html')
 
 # ruta de registro
@@ -107,6 +120,9 @@ def registrar():
 
 @app.route('/validar', methods=['POST'])
 def validar():
+    if 'usuario' not in session:
+        flash('Debes iniciar sesión para acceder a esta página.', 'error')
+        return redirect(url_for('login'))
     empleado_id = request.form.get('empleado_id')
     if not empleado_id:
         flash('ID de empleado requerido.')
@@ -145,5 +161,4 @@ def validar():
 
 
 if __name__ == '__main__':
-    print(app.url_map)
     app.run(debug=True)

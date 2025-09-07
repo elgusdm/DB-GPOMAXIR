@@ -16,10 +16,12 @@
       {% endif %}
     {% endwith %}
     <form action="{{ url_for('registrar') }}" method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" required><br>
-        <label for="puesto">Puesto:</label>
-        <input type="text" name="puesto" id="puesto" required><br>
+        <label for="user">Usuario:</label>
+        <input type="text" name="user" id="usuario" required><br>
+        <label for="pass">Contraseña:</label>
+        <input type="text" name="pass" id="password" required><br>
+        <label for="rs">Razon Social</label>
+        <input type="text" name="rs" id="razonSocial" required><br>
         <button type="submit">Registrar</button>
     </form>
 </body>

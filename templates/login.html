@@ -26,9 +26,9 @@
                     <input type="text" name="usuario" id="user" class="input-field" required placeholder=" " autocomplete="username" autofocus>
                     <label for="user" class="label">Usuario</label>
                 </div>
-                <div class="input-box">
-                    <i class="bx bx-lock-alt icon"></i>
+                <div class="input-box" style="position:relative;">
                     <input type="password" name="password" id="pass" class="input-field" required placeholder=" " autocomplete="current-password">
+                    <i class="bx bx-show icon toggle-password" id="togglePassword" style="cursor:pointer;"></i>
                     <label for="pass" class="label">Contraseña</label>
                 </div>
                 <div class="remember-forgot">
@@ -36,9 +36,9 @@
                         <input type="checkbox" id="remember">
                         <label for="remember">Recordarme</label>
                     </div>
-                    <div class="forgot">
+                    <!--<div class="forgot">
                         <a href="#">¿Olvidaste tu contraseña?</a>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="input-box">
                     <input type="submit" class="input-submit" value="Entrar">
@@ -50,5 +50,19 @@
             </form>
         </div>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('pass');
+    const togglePassword = document.getElementById('togglePassword');
+    togglePassword.addEventListener('click', function () {
+        // Cambia el tipo de input
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        // Cambia el icono
+        this.classList.toggle('bx-show');
+        this.classList.toggle('bx-hide');
+    });
+});
+</script>
 </body>
 </html>
