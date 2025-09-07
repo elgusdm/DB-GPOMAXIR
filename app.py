@@ -4,7 +4,8 @@ import mysql.connector
 import barcode
 from barcode.writer import ImageWriter
 import os
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
+from mysql.connector.errors import IntegrityError
 
 
 app = Flask(__name__)
@@ -151,6 +152,44 @@ def validar():
     except Exception as e:
         flash(f'Error en la validación: {e}')
         return redirect(url_for('validar_form'))
+
+# Ruta para registrar nuevos usuarios
+
+
+@app.route('/registro_usuario', methods=['POST'])
+def registro_usuario():
+    usuario = request.form.get('usuario')
+    password = request.form.get('password')
+    password2 = request.form.get('password2')
+    permiso_validar = True if request.form.get('permiso_validar') else False
+
+    if not usuario or not password or not password2:
+        flash('Todos los campos son requeridos.')
+        return redirect(url_for('registro'))
+
+    if password != password2:
+        flash('Las contraseñas no coinciden.')
+        return redirect(url_for('registro'))
+
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor()
+        hash_pw = generate_password_hash(password)
+        cur.execute(
+            "INSERT INTO usuarios (usuario, password, permiso_validar) VALUES (%s, %s, %s)",
+            (usuario, hash_pw, permiso_validar)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        flash('Usuario registrado correctamente.')
+        return redirect(url_for('login'))
+    except IntegrityError:
+        flash('El usuario ya existe. Elige otro nombre de usuario.')
+        return redirect(url_for('registro'))
+    except Exception as e:
+        flash(f'Error al registrar usuario: {e}')
+        return redirect(url_for('registro'))
 
 # Medidas de seguridad:
 # - Usa parámetros en SQL para evitar inyección.

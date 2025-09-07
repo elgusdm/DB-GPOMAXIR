@@ -107,6 +107,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     margin: 20px 0;
+    margin-bottom: 28px;
 }
 
 .input-field {
@@ -171,19 +172,24 @@ a:hover {
 }
 
 .input-submit {
-    width: 100%;
-    height: 50px;
-    background: linear-gradient(120deg, var(--primary-color), #ed44447d);
-    font-size: 18px;
-    font-weight: 500;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: 0.3s;
+    background-color: #0d2b43;
+    border-color: #0d2b43;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 2rem;
+    padding: 0.75rem 2.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: background 0.2s, border 0.2s, transform 0.2s;
 }
 
 .input-submit:hover {
-    background: linear-gradient(120deg, #ed44447d, var(--primary-color));
+    background-color: #ed4544;
+    border-color: #ed4544;
+    color: #fff;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(237, 69, 68, 0.18);
+
 }
 
 .register {

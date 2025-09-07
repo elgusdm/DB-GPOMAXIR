@@ -2,27 +2,75 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Empleado</title>
+    <title>Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/login.css">
 </head>
 <body>
-    <h2>Registro de Empleado</h2>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    <form action="{{ url_for('registrar') }}" method="post">
-        <label for="user">Usuario:</label>
-        <input type="text" name="user" id="usuario" required><br>
-        <label for="pass">Contraseña:</label>
-        <input type="text" name="pass" id="password" required><br>
-        <label for="rs">Razon Social</label>
-        <input type="text" name="rs" id="razonSocial" required><br>
-        <button type="submit">Registrar</button>
-    </form>
+    <div class="wrapper">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="{{ url_for('static', filename='img/logoMaxir.png') }}" alt="Logo" class="login-logo">
+                <span></span>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('registro_usuario') }}" method="POST">
+                <div class="input-box">
+                    <i class="bx bx-user icon"></i>
+                    <input type="text" name="usuario" id="usuario" class="input-field" required placeholder=" " autocomplete="username" autofocus>
+                    <label for="usuario" class="label">Usuario</label>
+                </div>
+                <div class="input-box" style="position:relative;">
+                    <input type="password" name="password" id="regpass" class="input-field" required placeholder=" " autocomplete="new-password">
+                    <i class="bx bx-show icon toggle-password" id="toggleRegPassword" style="cursor:pointer;"></i>
+                    <label for="regpass" class="label">Contraseña</label>
+                </div>
+                <div class="input-box" style="position:relative;">
+                    <input type="password" name="password2" id="regpass2" class="input-field" required placeholder=" " autocomplete="new-password">
+                    <i class="bx bx-show icon toggle-password" id="toggleRegPassword2" style="cursor:pointer;"></i>
+                    <label for="regpass2" class="label">Repite la contraseña</label>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" name="permiso_validar" id="permiso_validar" checked>
+                        <label for="permiso_validar">¿Puede validar empleados?</label>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <input type="submit" class="input-submit" value="Registrar usuario">
+                </div>
+                <div class="register">
+                    <span>¿Ya tienes cuenta?
+                        <a href="{{ url_for('login') }}">Inicia sesión</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('regpass');
+    const togglePassword = document.getElementById('toggleRegPassword');
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.classList.toggle('bx-show');
+        this.classList.toggle('bx-hide');
+    });
+    const passwordInput2 = document.getElementById('regpass2');
+    const togglePassword2 = document.getElementById('toggleRegPassword2');
+    togglePassword2.addEventListener('click', function () {
+        const type = passwordInput2.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput2.setAttribute('type', type);
+        this.classList.toggle('bx-show');
+        this.classList.toggle('bx-hide');
+    });
+});
+</script>
 </body>
 </html>
