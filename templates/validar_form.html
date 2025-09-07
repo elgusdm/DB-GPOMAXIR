@@ -1,0 +1,23 @@
+<!-- filepath: /Users/jmrr/Documents/DB GPOMAXIR/DB-GPOMAXIR/templates/validar_form.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Validar Empleado</title>
+</head>
+<body>
+    <h2>Validar Empleado</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('validar') }}" method="POST">
+        <label for="empleado_id">Escanea o ingresa el ID del empleado:</label>
+        <input type="text" name="empleado_id" id="empleado_id" required autofocus>
+        <button type="submit">Validar</button>
+    </form>
+</body>
+</html>

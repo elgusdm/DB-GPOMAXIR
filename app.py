@@ -3,6 +3,7 @@ import mysql.connector
 import barcode
 from barcode.writer import ImageWriter
 import os
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 # Cambia esto por una clave segura en producción
@@ -10,17 +11,17 @@ app.secret_key = 'tu_clave_secreta'
 
 # Configuración de la conexión a la base de datos (adapta estos valores cuando tengas la base creada)
 db_config = {
-    'host': 'localhost',
-    'user': 'tu_usuario',
-    'password': 'tu_contraseña',
-    'database': 'tu_base_de_datos'
+    'host': '127.0.0.1',
+    'user': 'admin01',
+    'password': 'MXR.2025',
+    'database': 'MAXIRV7'
 }
 
 # Función para generar el código de barras
 
 
 def generar_barcode(empleado_id):
-    carpeta = 'static/barcodes'
+    carpeta = 'barcodes'
     if not os.path.exists(carpeta):
         os.makedirs(carpeta)
     filename = os.path.join(carpeta, f'empleado_{empleado_id}.png')
@@ -28,7 +29,47 @@ def generar_barcode(empleado_id):
     codigo.save(filename)
     return filename
 
-# Ruta para mostrar formulario de registro
+# Rutas
+
+# ruta raiz
+
+
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
+# ruta del login
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form.get('usuario')
+        password = request.form.get('password')
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario,))
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
+        if user and check_password_hash(user['password'], password):
+            if user['permiso_validar']:
+                # Aquí puedes guardar el usuario en sesión si quieres
+                return redirect(url_for('validar_form'))
+            else:
+                flash('No tienes permiso para validar empleados.', 'error')
+        else:
+            flash('Usuario o contraseña incorrectos.', 'error')
+    return render_template('login.html')
+
+# ruta del formulario de validación
+
+
+@app.route('/validar_form', methods=['GET'])
+def validar_form():
+    return render_template('validar_form.html')
+
+# ruta de registro
 
 
 @app.route('/registro')
@@ -69,22 +110,31 @@ def validar():
     empleado_id = request.form.get('empleado_id')
     if not empleado_id:
         flash('ID de empleado requerido.')
-        return redirect(url_for('login'))
+        return redirect(url_for('validar_form'))
     try:
         conn = mysql.connector.connect(**db_config)
         cur = conn.cursor(dictionary=True)
         cur.execute("SELECT * FROM empleados WHERE id = %s", (empleado_id,))
         empleado = cur.fetchone()
+        if not empleado:
+            cur.close()
+            conn.close()
+            flash('Empleado no encontrado.')
+            return redirect(url_for('validar_form'))
+        if empleado.get('validado'):
+            mensaje = 'El empleado ya fue validado.'
+        else:
+            # Marca como validado
+            cur.execute(
+                "UPDATE empleados SET validado = TRUE WHERE id = %s", (empleado_id,))
+            conn.commit()
+            mensaje = 'Empleado validado exitosamente.'
         cur.close()
         conn.close()
-        if empleado:
-            return render_template('validacion.html', empleado=empleado)
-        else:
-            flash('Empleado no encontrado.')
-            return redirect(url_for('login'))
+        return render_template('validacion.html', empleado=empleado, mensaje=mensaje)
     except Exception as e:
         flash(f'Error en la validación: {e}')
-        return redirect(url_for('login'))
+        return redirect(url_for('validar_form'))
 
 # Medidas de seguridad:
 # - Usa parámetros en SQL para evitar inyección.
@@ -95,4 +145,5 @@ def validar():
 
 
 if __name__ == '__main__':
+    print(app.url_map)
     app.run(debug=True)

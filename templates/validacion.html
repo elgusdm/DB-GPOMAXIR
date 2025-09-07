@@ -1,26 +1,20 @@
+<!-- filepath: /Users/jmrr/Documents/DB GPOMAXIR/DB-GPOMAXIR/templates/validacion.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Validar Empleado</title>
+    <title>Resultado de Validación</title>
 </head>
 <body>
-    <h2>Validación de Empleado</h2>
-    <form method="POST">
-        <label for="empleado_id">Escanea tu credencial:</label>
-        <input type="text" name="empleado_id" id="empleado_id" autofocus autocomplete="off" required>
-        <button type="submit">Validar</button>
-    </form>
+    <h2>Resultado de Validación</h2>
+    <p>{{ mensaje }}</p>
     {% if empleado %}
-        <hr>
-        <p><strong>ID:</strong> {{ empleado.id }}</p>
-        <p><strong>Nombre:</strong> {{ empleado.nombre }}</p>
-        <p><strong>Puesto:</strong> {{ empleado.puesto }}</p>
-        <img src="{{ url_for('static', filename='barcodes/empleado_' ~ empleado.id ~ '.png') }}" alt="Código de barras">
-        <p>Empleado válido.</p>
-    {% elif resultado %}
-        <p>{{ resultado }}</p>
+        <ul>
+            <li>ID: {{ empleado.id }}</li>
+            <li>Nombre: {{ empleado.nombre }}</li>
+            <li>Puesto: {{ empleado.puesto }}</li>
+        </ul>
     {% endif %}
-    <a href="{{ url_for('registro') }}">Volver al registro</a>
+    <a href="{{ url_for('validar_form') }}">Validar otro empleado</a>
 </body>
 </html>
