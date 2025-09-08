@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "poppins", sans-serif;
+}
+
+:root {
+    --primary-color: #c6c3c3;
+    --second-color: #ffffff;
+    --black-color: #000000;
+}
+
+body {
+    background-color: #0d2b43;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+@media only screen and (max-width: 564px) {
+    .wrapper {
+        padding: 20px;
+    }
+
+    .login_box {
+        padding: 7.5em 1.5em 4em 1.5em;
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
