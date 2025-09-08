@@ -14,7 +14,7 @@ app.secret_key = 'tu_clave_secreta'
 # Duración de la sesión si "recordarme" está activo
 app.permanent_session_lifetime = timedelta(days=7)
 
-# Configuración de la conexión a la base de datos (adapta estos valores cuando tengas la base creada)
+# Configuración de la conexión a la base de datos
 db_config = {
     'host': '127.0.0.1',
     'user': 'admin01',
@@ -191,7 +191,7 @@ def registro_usuario():
         flash(f'Error al registrar usuario: {e}')
         return redirect(url_for('registro'))
 
-# Medidas de seguridad:
+# Medidas de seguridad para la APP by elgusdm:
 # - Usa parámetros en SQL para evitar inyección.
 # - Cambia app.secret_key por una clave segura.
 # - Usa HTTPS en producción.
