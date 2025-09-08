@@ -86,8 +86,6 @@ input[type="checkbox"] {
     display: none;
 }
 
-body {}
-
 .vertical-sidebar {
     display: flex;
     inline-size: var(--expanded);
