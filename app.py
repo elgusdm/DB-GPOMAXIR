@@ -9,7 +9,7 @@ from mysql.connector.errors import IntegrityError
 
 
 app = Flask(__name__)
-# Cambia esto por una clave segura en producción
+# Clave segura en producción
 app.secret_key = 'tu_clave_secreta'
 # Duración de la sesión si "recordarme" está activo
 app.permanent_session_lifetime = timedelta(days=7)
@@ -191,12 +191,12 @@ def registro_usuario():
         flash(f'Error al registrar usuario: {e}')
         return redirect(url_for('registro'))
 
-# Medidas de seguridad para la APP by elgusdm:
-# - Usa parámetros en SQL para evitar inyección.
-# - Cambia app.secret_key por una clave segura.
-# - Usa HTTPS en producción.
-# - Limita permisos del usuario de la base de datos.
-# - Valida y sanitiza todas las entradas del usuario.
+# Medidas de seguridad:
+# - Parámetros en SQL para evitar inyección.
+# - App.secret_key por una clave segura.
+# - HTTPS en producción.
+# - Limitar permisos del usuario de la base de datos.
+# - Validar y sanitizar todas las entradas del usuario.
 
 
 if __name__ == '__main__':
