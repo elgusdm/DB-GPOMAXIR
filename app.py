@@ -1,25 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import timedelta
-import sqlite3
+import mysql.connector
 import barcode
 from barcode.writer import ImageWriter
 import os
 from werkzeug.security import check_password_hash, generate_password_hash
+from mysql.connector.errors import IntegrityError
+
 
 app = Flask(__name__)
-app.secret_key = 'tu_clave_secreta_muy_segura_2025'
+# Clave segura en producción
+app.secret_key = 'tu_clave_secreta'
+# Duración de la sesión si "recordarme" está activo
 app.permanent_session_lifetime = timedelta(days=7)
 
-# Configuración de la base de datos SQLite
-DATABASE = 'maxir.db'
+# Configuración de la conexión a la base de datos
+db_config = {
+    'host': '127.0.0.1',
+    'user': 'admin01',
+    'password': 'MXR.2025',
+    'database': 'MAXIRV7'
+}
 
-def get_db_connection():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
+# Función para generar el código de barras
+
 
 def generar_barcode(empleado_id):
-    carpeta = 'static/barcodes'
+    carpeta = 'barcodes'
     if not os.path.exists(carpeta):
         os.makedirs(carpeta)
     filename = os.path.join(carpeta, f'empleado_{empleado_id}.png')
@@ -27,21 +34,31 @@ def generar_barcode(empleado_id):
     codigo.save(filename)
     return filename
 
+# Rutas
+
+# ruta raiz
+
+
 @app.route('/')
 def index():
     return redirect(url_for('login'))
+
+# ruta del login
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         usuario = request.form.get('usuario')
         password = request.form.get('password')
+        # Checkbox: 'on' si está marcado
         recordarme = request.form.get('recordarme')
-        
-        conn = get_db_connection()
-        user = conn.execute('SELECT * FROM usuarios WHERE usuario = ?', (usuario,)).fetchone()
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario,))
+        user = cur.fetchone()
+        cur.close()
         conn.close()
-        
         if user and check_password_hash(user['password'], password):
             if user['permiso_validar']:
                 session['usuario'] = usuario
@@ -56,6 +73,9 @@ def login():
             flash('Usuario o contraseña incorrectos.', 'error')
     return render_template('login.html')
 
+# ruta del formulario de validación
+
+
 @app.route('/validar_form', methods=['GET'])
 def validar_form():
     if 'usuario' not in session:
@@ -63,9 +83,15 @@ def validar_form():
         return redirect(url_for('login'))
     return render_template('validar_form.html')
 
+# ruta de registro
+
+
 @app.route('/registro')
 def registro():
     return render_template('registro.html')
+
+# Ruta para registrar empleado
+
 
 @app.route('/registrar', methods=['POST'])
 def registrar():
@@ -75,11 +101,13 @@ def registrar():
         flash('Nombre y puesto son requeridos.')
         return redirect(url_for('registro'))
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO empleados (nombre, puesto) VALUES (?, ?)', (nombre, puesto))
-        empleado_id = cursor.lastrowid
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO empleados (nombre, puesto) VALUES (%s, %s)", (nombre, puesto))
         conn.commit()
+        empleado_id = cur.lastrowid
+        cur.close()
         conn.close()
         generar_barcode(empleado_id)
         flash('Empleado registrado correctamente.')
@@ -87,6 +115,9 @@ def registrar():
     except Exception as e:
         flash(f'Error al registrar: {e}')
         return redirect(url_for('registro'))
+
+# Ruta para validar empleado por código de barras
+
 
 @app.route('/validar', methods=['POST'])
 def validar():
@@ -98,23 +129,32 @@ def validar():
         flash('ID de empleado requerido.')
         return redirect(url_for('validar_form'))
     try:
-        conn = get_db_connection()
-        empleado = conn.execute('SELECT * FROM empleados WHERE id = ?', (empleado_id,)).fetchone()
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor(dictionary=True)
+        cur.execute("SELECT * FROM empleados WHERE id = %s", (empleado_id,))
+        empleado = cur.fetchone()
         if not empleado:
+            cur.close()
             conn.close()
             flash('Empleado no encontrado.')
             return redirect(url_for('validar_form'))
-        if empleado['validado']:
+        if empleado.get('validado'):
             mensaje = 'El empleado ya fue validado.'
         else:
-            conn.execute('UPDATE empleados SET validado = 1 WHERE id = ?', (empleado_id,))
+            # Marca como validado
+            cur.execute(
+                "UPDATE empleados SET validado = TRUE WHERE id = %s", (empleado_id,))
             conn.commit()
             mensaje = 'Empleado validado exitosamente.'
+        cur.close()
         conn.close()
         return render_template('validacion.html', empleado=empleado, mensaje=mensaje)
     except Exception as e:
         flash(f'Error en la validación: {e}')
         return redirect(url_for('validar_form'))
+
+# Ruta para registrar nuevos usuarios
+
 
 @app.route('/registro_usuario', methods=['POST'])
 def registro_usuario():
@@ -132,28 +172,32 @@ def registro_usuario():
         return redirect(url_for('registro'))
 
     try:
-        conn = get_db_connection()
+        conn = mysql.connector.connect(**db_config)
+        cur = conn.cursor()
         hash_pw = generate_password_hash(password)
-        conn.execute(
-            'INSERT INTO usuarios (usuario, password, permiso_validar) VALUES (?, ?, ?)',
+        cur.execute(
+            "INSERT INTO usuarios (usuario, password, permiso_validar) VALUES (%s, %s, %s)",
             (usuario, hash_pw, permiso_validar)
         )
         conn.commit()
+        cur.close()
         conn.close()
         flash('Usuario registrado correctamente.')
         return redirect(url_for('login'))
-    except sqlite3.IntegrityError:
+    except IntegrityError:
         flash('El usuario ya existe. Elige otro nombre de usuario.')
         return redirect(url_for('registro'))
     except Exception as e:
         flash(f'Error al registrar usuario: {e}')
         return redirect(url_for('registro'))
 
-@app.route('/logout')
-def logout():
-    session.pop('usuario', None)
-    flash('Has cerrado sesión correctamente.')
-    return redirect(url_for('login'))
+# Medidas de seguridad:
+# - Parámetros en SQL para evitar inyección.
+# - App.secret_key por una clave segura.
+# - HTTPS en producción.
+# - Limitar permisos del usuario de la base de datos.
+# - Validar y sanitizar todas las entradas del usuario.
+
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
