@@ -19,7 +19,7 @@
             <li><a href="{{ url_for('validar_form') }}"><i class='bx bx-barcode'></i> <span>Validar</span></a></li>
         </ul>
     </div>
-    
+
     <div class="main-content">
         <h2>Validar Empleado</h2>
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -52,7 +52,7 @@
     </div>
     
     <div style="margin-top: 20px;">
-        <a href="{{ url_for('logout') }}" style="color: #ed4544; text-decoration: none;">Cerrar Sesión</a>
+        <a href="{{ url_for('login') }}" style="color: #ed4544; text-decoration: none;">Cerrar Sesión</a>
     </div>
 
 
