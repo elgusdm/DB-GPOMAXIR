@@ -72,6 +72,7 @@
   </aside>
   <!--FIN SIDEBAR-->
 
+  <div style="margin-left: 300px; padding: 20px;">
     <h2><span>Validar Empleado</span></h2>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -85,5 +86,25 @@
         <input type="text" name="empleado_id" id="empleado_id" required autofocus>
         <button type="submit">Validar</button>
     </form>
+    
+    <div style="margin-top: 30px;">
+        <h3>Registrar Nuevo Empleado</h3>
+        <form action="{{ url_for('registrar') }}" method="POST">
+            <div style="margin-bottom: 15px;">
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label for="puesto">Puesto:</label>
+                <input type="text" name="puesto" id="puesto" required>
+            </div>
+            <button type="submit">Registrar Empleado</button>
+        </form>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('logout') }}" style="color: #ed4544; text-decoration: none;">Cerrar Sesión</a>
+    </div>
+  </div>
 </body>
 </html>

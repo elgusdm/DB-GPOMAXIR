@@ -33,7 +33,7 @@
                 </div>
                 <div class="remember-forgot">
                     <div class="remember-me">
-                        <input type="checkbox" id="remember">
+                        <input type="checkbox" name="recordarme" id="remember">
                         <label for="remember">Recordarme</label>
                     </div>
                     <!--<div class="forgot">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="register">
                     <span>¿No tienes cuenta?
-                        <a href="http://127.0.0.1:5000/registro">Regístrate</a></span>
+                        <a href="{{ url_for('registro') }}">Regístrate</a></span>
                 </div>
             </form>
         </div>
