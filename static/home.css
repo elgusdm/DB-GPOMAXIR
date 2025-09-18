@@ -115,9 +115,17 @@ p {
     color: #fff;
 }
 
+.grupo-principal {
+    color: #0d2b43;
+    background: #fff;
+    padding: 0 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
 .capa {
     position: absolute;
-    top: 0;
+    top: 100%;
     left: 0;
     width: 100%;
     height: 100%;
@@ -315,4 +323,115 @@ form input[type="text"] {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
+}
+
+@media (max-width: 991px) {
+    main.container {
+        margin-left: 0 !important;
+        padding-top: 80px !important;
+    }
+
+    .sidebar {
+        width: 100vw;
+        height: 60px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2000;
+        padding: 0 10px;
+    }
+
+    .sidebar-header {
+        flex-direction: row;
+        align-items: center;
+        padding: 0 10px;
+        text-align: left;
+    }
+
+    .sidebar-logo {
+        width: 40px;
+        margin-bottom: 0;
+        margin-right: 10px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0;
+        padding: 0 0 0 20px;
+        width: auto;
+    }
+
+    .sidebar-menu li {
+        margin: 0 10px;
+    }
+
+    .sidebar-menu a {
+        font-size: 1rem;
+        padding: 8px 10px;
+        border-radius: 6px;
+    }
+
+    body {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 767px) {
+    main.container {
+        padding-top: 70px !important;
+    }
+
+    .row.g-4 {
+        flex-direction: column !important;
+    }
+
+    .col-md-4 {
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    h1.display-5 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .sidebar {
+        height: 50px;
+    }
+
+    .sidebar-logo {
+        width: 30px;
+    }
+
+    .sidebar-header h2 {
+        font-size: 1rem;
+    }
+
+    main.container {
+        padding-top: 60px !important;
+    }
+
+    .main-content,
+    .card {
+        padding: 10px;
+    }
+
+    h1.display-5 {
+        font-size: 1.3rem;
+    }
 }
