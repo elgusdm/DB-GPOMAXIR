@@ -123,6 +123,14 @@ def registrar():
         flash(f'Error al registrar: {e}')
         return redirect(url_for('registro'))
 
+
+# Ruta para enviar email
+@app.route('/email')
+def email():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    return render_template('email.html')
+
 # Ruta para validar empleado por código de barras
 
 
