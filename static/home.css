@@ -59,6 +59,10 @@ span {
     font-weight: bold;
 }
 
+.text-primary {
+    color: var(--second-color);
+}
+
 label,
 button {
     cursor: pointer;
@@ -77,6 +81,52 @@ p {
     margin: 0;
     font-size: inherit;
     line-height: 1.1;
+}
+
+#home {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background-image: url(/static/img/fondoHome.jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    text-align: center;
+    padding: 0 20px 80px 20px;
+    margin-top: 40px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+#home h1,
+#home p {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#home h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 0.04em;
+    color: #fff;
+}
+
+.capa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    border-radius: 24px;
 }
 
 
