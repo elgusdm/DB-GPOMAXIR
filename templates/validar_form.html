@@ -33,30 +33,13 @@
         <form action="{{ url_for('validar') }}" method="POST">
             <label for="empleado_id">Escanea o ingresa el ID del empleado:</label>
             <input type="text" name="empleado_id" id="empleado_id" required autofocus>
-            <button type="submit">Validar</button>
-        </form>
-    </div>
-
-    <div style="margin-top: 30px;">
-        <h3>Registrar Nuevo Empleado</h3>
-        <form action="{{ url_for('registrar') }}" method="POST">
-            <div style="margin-bottom: 15px;">
-                <label for="nombre">Nombre:</label>
-                <input type="text" name="nombre" id="nombre" required>
+            <!--<button type="submit">Validar</button>-->
+            <div class="input-box">
+                <input type="submit" class="input-submit" value="Validar">
             </div>
-            <div style="margin-bottom: 15px;">
-                <label for="puesto">Puesto:</label>
-                <input type="text" name="puesto" id="puesto" required>
-            </div>
-            <button type="submit">Registrar Empleado</button>
         </form>
-    </div>
+    </div>  
     
-    <div style="margin-top: 20px;">
-        <a href="{{ url_for('login') }}" style="color: #ed4544; text-decoration: none;">Cerrar Sesión</a>
-    </div>
-
-
 
 </body>
 </html>
