@@ -73,6 +73,17 @@ def login():
             flash('Usuario o contraseña incorrectos.', 'error')
     return render_template('login.html')
 
+# ruta home
+
+
+@app.route('/home', methods=['GET'])
+def home():
+    if 'usuario' not in session:
+        flash('Debes iniciar sesión para acceder a esta página.', 'error')
+        return redirect(url_for('login'))
+    return render_template('home.html')
+
+
 # ruta del formulario de validación
 
 
