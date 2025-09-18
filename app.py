@@ -43,6 +43,13 @@ def generar_barcode(empleado_id):
 def index():
     return redirect(url_for('login'))
 
+
+@app.route('/home')
+def home():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    return render_template('home.html')
+
 # ruta del login
 
 
@@ -66,23 +73,12 @@ def login():
                     session.permanent = True
                 else:
                     session.permanent = False
-                return redirect(url_for('validar_form'))
+                return redirect(url_for('home'))
             else:
                 flash('No tienes permiso para validar empleados.', 'error')
         else:
             flash('Usuario o contraseña incorrectos.', 'error')
     return render_template('login.html')
-
-# ruta home
-
-
-@app.route('/home', methods=['GET'])
-def home():
-    if 'usuario' not in session:
-        flash('Debes iniciar sesión para acceder a esta página.', 'error')
-        return redirect(url_for('login'))
-    return render_template('home.html')
-
 
 # ruta del formulario de validación
 
