@@ -1,0 +1,42 @@
+<!-- filepath: /Users/jmrr/Documents/DB GPOMAXIR/DB-GPOMAXIR/templates/validar_form.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Validar Empleado</title>
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/validar_form.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="{{ url_for('static', filename='img/logoMaxir.png') }}" alt="Logo" class="sidebar-logo">
+            <h2>MAXIR</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('login') }}"><i class='bx bx-log-in'></i> <span>Login</span></a></li>
+            <li><a href="{{ url_for('registro') }}"><i class='bx bx-user-plus'></i> <span>Registro</span></a></li>
+            <li><a href="{{ url_for('validar_form') }}"><i class='bx bx-barcode'></i> <span>Validar</span></a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h2>GRUPO MAXIR</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('login') }}" style="color: #ed4544; text-decoration: none;">Cerrar Sesión</a>
+    </div>
+
+
+
+</body>
+</html>
