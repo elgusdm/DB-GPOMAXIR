@@ -51,7 +51,6 @@ body {
     margin: 0;
     min-block-size: 100vh;
     font-family: "Poppins", sans-serif;
-    /*background: linear-gradient(32deg, hsl(193 6 76), hsl(196 9 69) 50%);*/
 }
 
 span {
