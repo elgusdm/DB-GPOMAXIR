@@ -39,6 +39,86 @@
     --brad-inner: calc(var(--brad-outer) - var(--frame-space));
 }
 
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 270px;
+    background: url("{{ url_for('static', filename='img/fondoHome.jpg') }}") no-repeat center center;
+    background-size: cover;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.11);
+    margin-bottom: 40px;
+    border-radius: 16px;
+    margin-top: 0 !important;
+    z-index: 1;
+}
+
+.hero-overlay {
+    background: rgba(20, 30, 60, 0.55);
+    border-radius: 16px;
+    padding: 40px 20px;
+    width: 100%;
+    text-align: center;
+}
+
+main.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 60vh;
+    margin-left: 230px;
+    margin-top: 0;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    gap: 0;
+}
+
+.info-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    max-width: 600px;
+    width: 100%;
+    justify-content: center;
+}
+
+.info-section .icon {
+    font-size: 3.4rem;
+    color: #0d6efd;
+    min-width: 60px;
+}
+
+.info-section .section-title {
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.info-section .section-desc {
+    margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+    .info-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-section .icon {
+        margin-bottom: 10px;
+    }
+}
+
+
 body {
     background-color: #0d2b43;
     background-repeat: no-repeat;
@@ -391,17 +471,15 @@ form input[type="text"] {
         padding-top: 70px !important;
     }
 
-    .row.g-4 {
+    .info-section {
         flex-direction: column !important;
-    }
-
-    .col-md-4 {
+        text-align: center;
         max-width: 100%;
-        flex: 0 0 100%;
+        padding: 20px 8px;
     }
 
-    .card {
-        margin-bottom: 20px;
+    .info-section .icon {
+        margin-bottom: 10px;
     }
 
     h1.display-5 {
@@ -426,12 +504,15 @@ form input[type="text"] {
         padding-top: 60px !important;
     }
 
-    .main-content,
-    .card {
-        padding: 10px;
+    .info-section {
+        padding: 10px 2px;
     }
 
     h1.display-5 {
         font-size: 1.3rem;
     }
+}
+
+.text-maxir {
+    color: #ed4544 !important;
 }

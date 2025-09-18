@@ -22,46 +22,41 @@
         </ul>
     </div>
 
-    <main class="container" style="margin-left:230px; padding-top:40px;">
-        <div class="row mb-4">
-            <div class="col-12">
-                <img src="{{ url_for('static', filename='img/fongoHome.jpg') }}" alt="Logo">
-                <h1 class="display-5 fw-bold mb-2"><span class="grupo-principal">GRUPO</span> <span class="text-primary">MAXIR</span></h1>
-                <p class="lead">Bienvenido al sistema de gestión y validación de empleados.</p>
-            </div>
+    <!-- Hero fuera del main para que quede hasta arriba -->
+    <div class="hero-section shadow" style="background-image: url('{{ url_for('static', filename='img/fondoHome.jpg') }}');">
+        <div class="hero-overlay">
+            <h1 class="display-5 fw-bold mb-2"><span class="grupo-principal">GRUPO</span> <span class="text-maxir">MAXIR</span></h1>
+            <p class="lead">Bienvenido al sistema de gestión y validación de empleados.</p>
         </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="bi bi-envelope-arrow-up-fill" style="font-size:2.5rem;color:#0d6efd;"></i>
-                        <h5 class="card-title mt-3">Email</h5>
-                        <p class="card-text">Accede al módulo de envío de correos electrónicos internos.</p>
-                        <a href="{{ url_for('email') }}" class="btn btn-primary">Ir a Email</a>
-                    </div>
-                </div>
+    </div>
+
+    <!-- Main centrado debajo del hero -->
+    <main class="container d-flex flex-column align-items-center justify-content-center" style="margin-left:230px; padding-top:40px;">
+        <section class="info-section w-100" style="max-width:600px;">
+            <i class="bi bi-envelope-arrow-up-fill icon"></i>
+            <div>
+                <h3 class="section-title">Email</h3>
+                <p class="section-desc">Accede al módulo de envío de correos electrónicos internos.</p>
+                <a href="{{ url_for('email') }}" class="btn btn-outline-primary mt-2">Ir a Email</a>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="bi bi-upc-scan" style="font-size:2.5rem;color:#0d6efd;"></i>
-                        <h5 class="card-title mt-3">Validar Empleado</h5>
-                        <p class="card-text">Escanea o ingresa el ID de un empleado para validar su acceso.</p>
-                        <a href="{{ url_for('validar_form') }}" class="btn btn-primary">Validar</a>
-                    </div>
-                </div>
+        </section>
+        <section class="info-section w-100" style="max-width:600px;">
+            <i class="bi bi-upc-scan icon"></i>
+            <div>
+                <h3 class="section-title">Validar Empleado</h3>
+                <p class="section-desc">Escanea o ingresa el ID de un empleado para validar su acceso.</p>
+                <a href="{{ url_for('validar_form') }}" class="btn btn-outline-primary mt-2">Validar</a>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="bi bi-person-plus" style="font-size:2.5rem;color:#0d6efd;"></i>
-                        <h5 class="card-title mt-3">Registrar Usuario</h5>
-                        <p class="card-text">Crea una nueva cuenta de usuario para el sistema.</p>
-                        <a href="{{ url_for('registro') }}" class="btn btn-primary">Registrar</a>
-                    </div>
-                </div>
+        </section>
+        <section class="info-section w-100" style="max-width:600px;">
+            <i class="bi bi-person-plus icon"></i>
+            <div>
+                <h3 class="section-title">Registrar Usuario</h3>
+                <p class="section-desc">Crea una nueva cuenta de usuario para el sistema.</p>
+                <a href="{{ url_for('registro') }}" class="btn btn-outline-primary mt-2">Registrar</a>
             </div>
-        </div>
+        </section>
+        <!-- Flash messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <div class="row mt-4">
