@@ -21,8 +21,95 @@
             <li><a href="{{ url_for('login') }}"><i class='bi bi-box-arrow-right'></i> <span>Cerrar Sesion</span></a></li>
         </ul>
     </div>
-
-
-
+    <main class="container d-flex flex-column align-items-center justify-content-center" style="margin-left:230px; padding-top:40px;">
+        <h2 class="mb-4">Enviar Documento por Email</h2>
+        <input type="text" id="busqueda" class="form-control mb-3" placeholder="Buscar por nombre o puesto..." onkeyup="filtrarTabla()">
+        <div class="table-responsive w-100" style="max-width:700px;">
+            <table class="table table-striped" id="tablaEmpleados">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Puesto</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in empleados %}
+                    <tr>
+                        <td>{{ emp.id }}</td>
+                        <td>{{ emp.nombre }}</td>
+                        <td>{{ emp.puesto }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="mostrarResumen('{{ emp.id }}', '{{ emp.nombre }}', '{{ emp.puesto }}')">Enviar</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- Modal resumen -->
+        <div class="modal fade" id="resumenModal" tabindex="-1" aria-labelledby="resumenModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="resumenModalLabel">Resumen de Persona</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>ID:</strong> <span id="resumenId"></span></p>
+                <p><strong>Nombre:</strong> <span id="resumenNombre"></span></p>
+                <p><strong>Puesto:</strong> <span id="resumenPuesto"></span></p>
+              </div>
+              <div class="modal-footer">
+                <form method="POST" action="{{ url_for('enviar_email') }}">
+                  <input type="hidden" name="empleado_id" id="inputEmpleadoId">
+                  <button type="submit" class="btn btn-success">Confirmar y Enviar</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        function filtrarTabla() {
+            var input = document.getElementById('busqueda');
+            var filtro = input.value.toLowerCase();
+            var tabla = document.getElementById('tablaEmpleados');
+            var filas = tabla.getElementsByTagName('tr');
+            for (var i = 1; i < filas.length; i++) {
+                var celdas = filas[i].getElementsByTagName('td');
+                var mostrar = false;
+                for (var j = 0; j < celdas.length - 1; j++) {
+                    if (celdas[j].innerText.toLowerCase().indexOf(filtro) > -1) {
+                        mostrar = true;
+                        break;
+                    }
+                }
+                filas[i].style.display = mostrar ? '' : 'none';
+            }
+        }
+        function mostrarResumen(id, nombre, puesto) {
+            document.getElementById('resumenId').innerText = id;
+            document.getElementById('resumenNombre').innerText = nombre;
+            document.getElementById('resumenPuesto').innerText = puesto;
+            document.getElementById('inputEmpleadoId').value = id;
+            var modal = new bootstrap.Modal(document.getElementById('resumenModal'));
+            modal.show();
+        }
+        </script>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="row mt-4">
+              <div class="col-12">
+                {% for category, message in messages %}
+                  <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+    </main>
 </body>
 </html>
